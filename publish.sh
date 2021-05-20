@@ -1,13 +1,13 @@
 #!/bin/bash
 rm -rf obj/*
 rm -rf ~/.local/share/Trash/files/*
-rm -rf bin/Release/netcoreapp5.0/*
+rm -rf bin/Release/net5.0/*
 dotnet publish -c Release --self-contained -r ubuntu.16.04-x64
 dotnet publish -c Release --self-contained -r win10-x64
 dotnet publish -c Release --self-contained -r opensuse-x64
 dotnet publish -c Release --self-contained -r osx-x64
 
-cd bin/Release/netcoreapp5.0
+cd bin/Release/net5.0
 cp -r ../../../Scripts/linux ubuntu.16.04-x64/.
 cp -r ../../../Scripts/win10 win10-x64/.
 cp -r ../../../Scripts/linux opensuse-x64/.

@@ -29,6 +29,8 @@ namespace PasswordGenerator
             {
                 Console.Write("Please specify a Filename (without extension) to save password, please use alphabets and numbers only, no special charecters or spaces: ");
                 fileName = Console.ReadLine();
+                if (String.IsNullOrEmpty(fileName))
+                    continue;
                 Regex reg = new Regex(RegexToMatchFileName);
                 MatchCollection matches = reg.Matches(fileName);
                 if (matches.Count > 0)
@@ -68,7 +70,8 @@ namespace PasswordGenerator
                         return;
                     }
                 }
-                Console.WriteLine(@$"Data will be written to Documents folder: {pFilePath}.txt");
+               //Console.WriteLine(@$"Data will be written to Documents folder: {pFilePath}.txt");
+                Console.WriteLine(@$"Output - {pFilePath}.txt");
                 File.WriteAllText(@$"{pFilePath}.txt",password);
             }
             catch (UnauthorizedAccessException uaex)
