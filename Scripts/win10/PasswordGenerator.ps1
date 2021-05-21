@@ -7,7 +7,7 @@ $defaultPGenDataPath = "$defaultPersonalPath\pGenData\"
 $sshPath = "~\.ssh\"
 $sshPath = Resolve-Path -Path $sshPath |Foreach-Object{$_.Path}
 
-$PasswordGenerator = "..\..\bin\Release\net5.0\win10-x64\publish\PasswordGenerator.exe"
+$PasswordGenerator = "..\publish\PasswordGenerator.exe"
 Stop-Transcript -ErrorAction SilentlyContinue | Out-Null 
 
 $ReadOrCreateChoice = Read-Host -Prompt " Would you like to view an existing Password or create a new Password (v to View, c to Create)"
