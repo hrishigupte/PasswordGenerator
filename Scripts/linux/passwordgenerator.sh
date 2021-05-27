@@ -5,7 +5,7 @@ defaultsshPath="$HOME/.ssh"
 pGenPrivateKeyFile='pGenKeyFile.pem'
 pGenPublicKeyFile='pGenKeyFile.pub'
 defaultpGenPath="$HOME/PGenData"
-defaultPasswordGeneratorPath="../../bin/Release/net5.0/ubuntu.16.04-x64/publish"
+defaultPasswordGeneratorPath="../publish"
 passwordGenerator="PasswordGenerator"
 encryptor="Encryptor"
 
