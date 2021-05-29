@@ -5,7 +5,11 @@ defaultsshPath="$HOME/.ssh"
 pGenPrivateKeyFile='pGenKeyFile.pem'
 pGenPublicKeyFile='pGenKeyFile.pub'
 defaultpGenPath="$HOME/PGenData"
-defaultPasswordGeneratorPath="../publish"
+scriptName=$(basename "$0")
+defaultpGenScriptPath=$(command -v "$scriptName")
+defaultpGenScriptPath=$(echo $defaultpGenScriptPath | sed -e 's/"$scriptName"//')
+defaultPasswordGeneratorPath=$(cd "../publish";pwd)
+echo $defaultPasswordGeneratorPath
 passwordGenerator="PasswordGenerator"
 encryptor="Encryptor"
 
