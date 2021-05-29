@@ -6,10 +6,12 @@ pGenPrivateKeyFile='pGenKeyFile.pem'
 pGenPublicKeyFile='pGenKeyFile.pub'
 defaultpGenPath="$HOME/PGenData"
 scriptName=$(basename "$0")
+echo "Running $scriptName"
 defaultpGenScriptPath=$(command -v "$scriptName")
-defaultpGenScriptPath=$(echo $defaultpGenScriptPath | sed -e 's/"$scriptName"//')
+defaultpGenScriptPath=$(echo $defaultpGenScriptPath | sed -e "s/\/$scriptName//")
+cd $defaultpGenScriptPath
 defaultPasswordGeneratorPath=$(cd "../publish";pwd)
-echo $defaultPasswordGeneratorPath
+echo "PasswordGenerator installed at $defaultPasswordGeneratorPath"
 passwordGenerator="PasswordGenerator"
 encryptor="Encryptor"
 
