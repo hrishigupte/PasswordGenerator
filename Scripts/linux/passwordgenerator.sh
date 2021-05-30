@@ -48,7 +48,7 @@ if [ ! -f $defaultsshPath/$pGenPrivateKeyFile ]; then
     fi
 fi
 
-echo "Would you like to view an existing Password or create a new Password (v to View, c to Create)"
+echo "Would you like to view an existing Password or create a new Password (v to View, c to Create):"
 read ans
 
 if [ \( "$ans" = 'c' \) ]; then
@@ -68,6 +68,7 @@ if [ \( "$ans" = 'c' \) ]; then
         outfile=$(echo $outfile | sed -e 's/^[[:space:]]*//')
         cat $outfile
     fi
+    echo ""
     ext=$(echo $outfile | awk -F '.' '{print "."$NF}')
     #echo $ext
     replaceext="$ext.enc"
@@ -75,9 +76,61 @@ if [ \( "$ans" = 'c' \) ]; then
     outfilename=$(echo $outfile | sed -e "s|$ext|$replaceext|g")
     #echo $outfilename
     $encryptor --e --k $defaultsshPath/$pGenPublicKeyFile --i $outfile --o $outfilename
+    rm -f $outfile
 fi
 
-#for fl in `ls -p $defaultsshPath | grep -v '/$'`; do
-#    echo $fl
-#done
+
+if [ \( "$ans" = 'v' \) ]; then
+    arrfl=()
+    for fl in `ls -p $defaultpGenPath/*enc* | grep -v '/$'`; do
+       appnm=$(echo $fl | sed -e "s|$defaultpGenPath\/||g")
+       appnm=$(echo $appnm | awk -F '.' '{print $1}')
+       if [[ ! "${arrfl[@]}" =~ "$appnm" ]]; then
+	  arrfl[${#arrfl[@]}]=$appnm	
+       fi 
+    done
+    echo "Following passwords were found, please enter the name of the password to view:" 
+    for value in "${arrfl[@]}"
+    do
+	echo "$value"
+    done
+    inputfile=""
+    outputfile=""
+    echo "Please enter the name of password to view: "
+    read passans
+    if [ -z $passans ]; then
+	echo "Cannot continue without name of password to be viewed... Program will exit"
+	exit
+    fi
+    base64file=$(find "$defaultpGenPath" -name "$passans*.enc.base64" 2>/dev/null)
+    binfile=$(find "$defaultpGenPath" -name "$passans*.enc" 2> /dev/null)
+    echo $base64file
+    echo $binfile
+    if [ -z $base64file ] && [ -z $binfile ]; then
+   	echo "Matching Password File not found "
+	exit 
+    fi
+    stty -echo
+    echo "Enter the password for the Private key file. This is the password set when the key was originally created "
+    read pvpwd
+    stty echo  
+    if [[ ! -z $base64file ]]; then
+       inputfile=$base64file
+       outputfile=$(echo $inputfile | sed -e 's/.enc.base64//')
+       $encryptor --d --k $defaultsshPath/$pGenPrivateKeyFile --base64 --privatekeypassword $pvpwd --i $inputfile --o $outputfile 
+    elif [[ ! -z $binfile ]]; then
+       inputfile=$binfile
+       outputfile=$(echo $inputfile | sed -e 's/.enc//')
+       $encryptor --d --k $defaultsshPath/$pGenPrivateKeyFile --privatekeypassword $pvpwd --i $inputfile --o $outputfile
+    else
+	echo "File not found"
+        exit
+    fi
+    cat $outputfile
+    echo ""
+    rm -f $outputfile
+    echo "Press [ENTER] to exit..." 
+    read s
+fi
+
 IFS=$SAVEIFS
